@@ -1,4 +1,5 @@
 import org.jsoup.Jsoup;
+import java.util.Scanner;
 import java.util.LinkedList;
 import org.jsoup.nodes.Document;
 import java.util.stream.Collectors;
@@ -24,8 +25,21 @@ import com.careerjet.webservice.api.Client;
 public class SmartCity {
     public static void main(String args[]) throws Exception{
         System.out.println("Smart City");
+        Scanner s = new Scanner(System.in);
         //Tourism module
         //get hotel
+        SmartCity sc = new SmartCity();
+        System.out.println(sc.getHotels());
+        int distance = s.nextInt();
+        System.out.println("Enter distance in kilometers");
+        System.out.println(sc.getAttractions(distance));
+    }
+    /**
+     * Gets the names of the hotels in the city.
+     * @return the names of the hotels nearby.
+     */
+    public String getHotels() throws Exception {
+        String hotels = ""; 
         URL url = new URL("https://api.geoapify.com/v2/places?categories=accommodation.hotel&filter=rect:-83.5565068267818,34.08940116555951,-83.18829317321723,33.79675168842013&limit=20&apiKey=a305ad8ec2e34a569c192df2bba27be2");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         StringBuilder result = new StringBuilder();
@@ -48,11 +62,20 @@ public class SmartCity {
                     hotelName = properties.getAsJsonPrimitive("address_line1");
                 }
                 JsonPrimitive addr = properties.getAsJsonPrimitive("address_line2");
-                System.out.println(hotelName + "\n" + addr);
+                hotels += hotelName + "\n" + addr;
             }
 
         }
-        URL url2 = new URL("https://api.opentripmap.com/0.1/en/places/radius?radius=20000&lon=-83.357604&lat=33.9519&apikey=5ae2e3f221c38a28845f05b634ee2da680014417a5342d1496cdc86a");
+        return hotels;
+    }
+    /**
+     * Gets the names of attractions within a certain distance from the city.
+     * @return the names of the attractions nearby.
+     * @throws Exception
+     */
+    public String getAttractions(int distance) throws Exception {
+        String res = "";
+        URL url2 = new URL("https://api.opentripmap.com/0.1/en/places/radius?radius=" + distance * 1000 + "&lon=-83.357604&lat=33.9519&apikey=5ae2e3f221c38a28845f05b634ee2da680014417a5342d1496cdc86a");
         HttpURLConnection conn2 = (HttpURLConnection) url2.openConnection();
         StringBuilder result2 = new StringBuilder();
         conn2.setRequestMethod("GET");
@@ -75,7 +98,7 @@ public class SmartCity {
                     System.out.println(properties.getAsJsonPrimitive("name").getAsString() + properties.getAsJsonPrimitive("kinds").getAsString());
                     
                     types.addLast(properties.getAsJsonPrimitive("kinds").getAsString());
-                    
+                    res += properties.getAsJsonPrimitive("name") + "\n";
                     for (String j:types){
                         if (j.equals("cemeteries,historic,burial_places,interesting_places")){
                             count += 1;
@@ -88,6 +111,7 @@ public class SmartCity {
                 for (String s: Unique) {
                     System.out.println(s + ": " + Collections.frequency(types, s));
                 }
+                return res;
         }
         
     }
