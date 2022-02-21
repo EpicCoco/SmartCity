@@ -5,6 +5,7 @@
         "/Users/arjunkavungal/Downloads/moa-release-2021.07.0/lib/gson-2.8.5.jar",
         "/Users/arjunkavungal/Downloads/json-simple-1.1.1.jar",
         "/Users/arjunkavungal/Downloads/jython-installer-2.7.2.jar",
-        "/Users/arjunkavungal/Downloads/htmlunit-2.58.0/apidocs/com/gargoylesoftware/htmlunit/**/*.jar"
+        "/Users/arjunkavungal/Downloads/htmlunit-2.58.0/apidocs/com/gargoylesoftware/htmlunit/**/*.jar",
+        "/Users/arjunkavungal/Downloads/careerjet-api-client/CareerjetAPIClient.jar"
     ]
 }
